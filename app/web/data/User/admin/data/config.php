@@ -1,5 +1,5 @@
 <?php exit;?>{
-    "listType": "split",
+    "listType": "icon",
     "listSortField": "name",
     "listSortOrder": "up",
     "fileIconSize": "80",

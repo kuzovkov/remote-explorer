@@ -1,20 +1,22 @@
 #### Remote explorer
 
-
-
-
-##### Get SSl certificates
-rename nginx/prod/conf.d/default-ssl.conf -> nginx/prod/conf.d/default-ssl.conf.bak
-
+##### Install
 ```bash
-mv nginx/conf.d/default-ssl.conf nginx/dev/conf.d/default-ssl.conf.bak
-mv nginx/conf.d/default.conf.bak nginx/dev/conf.d/default.conf
-docker-compose restart nginx
-
-./certbot.sh <domain-name>
-
-mv nginx/conf.d/default-ssl.conf.bak nginx/dev/conf.d/default-ssl.conf 
-mv nginx/conf.d/default.conf nginx/dev/conf.d/default.conf.bak
- 
-docker-compose restart nginx
+git clone https://github.com/kuzovkov/remote-explorer
+cd remote-explorer 
+docker-compose build
 ```
+Edit volume mappping in `docker-compose yml` as yuo need 
+```bash
+docker-compose up -d
+sudo chmod 777 -R app/web
+```
+
+Go to `http://localhost:8043`
+
+Interface looks like this:
+
+![desktop inteface](screen1.png?raw=true)
+
+
+![file explorer](screen2.png?raw=true)
