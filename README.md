@@ -1,4 +1,5 @@
 #### Remote explorer
+It's dockerized application from https://github.com/kalcaddle/kodbox
 
 ##### Install
 ```bash
