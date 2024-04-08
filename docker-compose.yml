@@ -1,0 +1,44 @@
+version: '3.7'
+
+x-anchors:
+  args: &current-user-info
+    user: ${USER:-ubuntu}
+    user_id: ${USER_ID:-1000}
+    group_id: ${GROUP_ID:-1001}
+
+services:
+  nginx:
+    image: nginx:1.18-alpine
+    ports:
+     - "8043:80"
+    volumes:
+     - ./nginx/conf.d:/etc/nginx/conf.d:ro
+     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+     - share:/run/php
+     - ./app/web:/var/www/html
+    networks:
+      - live
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      args: *current-user-info
+    volumes:
+      - ./app/web:/var/www/html
+      - /home/user1/Downloads:/home/user1/
+      - share:/run/php
+    networks:
+      - live
+
+networks:
+  live:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 168.192.80.2/28
+
+volumes:
+  share: {}
