@@ -29,10 +29,10 @@ Interface looks like this:
 server {
         listen          80;
         listen         443 ssl http2;
-        server_name downloads.kuzovkov12.ru;
+        server_name you.domain.com;
 
 
-        allow 77.40.56.139;
+        allow 23.40.45.137;
         deny all;
         #SSL
         if ($scheme = http) {
@@ -61,8 +61,8 @@ server {
             root /var/www/certbot;
         }
 
-        ssl_certificate /etc/nginx/ssl/downloads.kuzovkov12.ru/fullchain.pem;
-        ssl_certificate_key /etc/nginx/ssl/downloads.kuzovkov12.ru/privkey.pem;
+        ssl_certificate /etc/nginx/ssl/you.domain.com/fullchain.pem;
+        ssl_certificate_key /etc/nginx/ssl/you.domain.com/privkey.pem;
 
         #include /etc/nginx/ssl-params.conf; #optional
         access_log /var/log/downloads-nginx-access.log;
