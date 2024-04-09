@@ -7,7 +7,7 @@ git clone https://github.com/kuzovkov/remote-explorer
 cd remote-explorer 
 docker-compose build
 ```
-Edit volume mappping in `docker-compose yml` as yuo need 
+Edit volume mappping in `docker-compose yml` as you need 
 ```bash
 docker-compose up -d
 sudo chmod 777 -R app/web
