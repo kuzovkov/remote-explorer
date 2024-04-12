@@ -70,3 +70,13 @@ server {
 }
 
 ```
+
+##### Install `ffmpeg` and convert `wmv` to `mp4`
+ 
+```bash
+sudo apt-get update
+sudo apt-get install ffmpeg
+
+cd ~/Downloads/C
+for i in *.wmv; do ffmpeg -i "$i" "${i%.*}.mp4"; done
+```
