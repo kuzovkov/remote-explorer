@@ -78,5 +78,20 @@ sudo apt-get update
 sudo apt-get install ffmpeg
 
 cd ~/Downloads/C
+
 for i in *.wmv; do ffmpeg -i "$i" "${i%.*}.mp4"; done
+
+# This will encode the video to H.264 video and AAC audio, using the default quality. 
+# To change the quality for the video, use a different CRF value, where lower means better,
+# e.g. 20 or 18. For audio, 100% is the default quality. Increase the value for better quality.
+
+for i in *.wmv; do ffmpeg -i "$i" -c:v libx264 -crf 23 -c:a aac -q:a 100 "${i%.*}.mp4"; done
+
+# For the AppleTV specifically, this is what Apple says it supports:
+# H.264 video up to 1080p, 30 frames per second, High or Main Profile level 4.0 or lower, 
+# Baseline profile level 3.0 or lower with AAC-LC audio up to 160 kbit/s per channel, 48 kHz, 
+# stereo audio in .m4v, .mp4, and .mov file formats
+# So, you could use the following command to force the 30 Hz frame rate and High profile:
+
+for i in *.wmv; do ffmpeg -i "$i"  -c:v libx264 -crf 23 -profile:v high -r 30 -c:a aac -q:a 100 -ar 48000 "${i%.*}.mp4"; done
 ```
