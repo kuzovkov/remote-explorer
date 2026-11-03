@@ -87,10 +87,10 @@ The `app/Dockerfile` compiles PHP 8.2 from source along with `imagick`:
 
 ### Unix Socket Missing / 502 Bad Gateway
 1. Verify `app` container is running: `docker compose ps`.
-2. Check if the socket file exists in `share` volume:
-   ```bash
-   docker compose exec nginx ls -la /run/php/
-   ```
+2. Check socket filename match:
+   - Check what FPM creates: `docker compose exec app ls -la /run/php/`
+   - Compare with `nginx/conf.d/default.conf` (`fastcgi_pass unix:/run/php/php8.2-fpm-0.sock;`) and `app/conf/www.conf` (`listen = /run/php/php8.2-fpm-0.sock`).
+   - If they differ (e.g. `php8.2-fpm.sock` vs `php8.2-fpm-0.sock`), update `nginx/conf.d/default.conf` and reload Nginx (`docker compose exec nginx nginx -s reload`).
 3. Check `app` container FPM logs:
    ```bash
    docker compose exec app cat /var/log/php8.2-fpm.log
@@ -101,6 +101,13 @@ The `app/Dockerfile` compiles PHP 8.2 from source along with `imagick`:
    ```
 
 ### Subnet Conflicts
-If `168.192.80.2/28` conflicts with existing Docker networks or local LAN:
+If the configured subnet conflicts with existing Docker networks or local LAN:
 - Run `./show-networks.sh` to see existing subnets.
 - Update `networks.live.ipam.config[0].subnet` in `docker-compose.yml`.
+
+## Web Endpoint Testing (MANDATORY RULE)
+
+> [!CAUTION]
+> **DO NOT USE `curl`** in the terminal to test HTTP endpoints or web access.
+> **ALWAYS USE `chrome-devtools` MCP server tools** (`navigate_page`, `take_snapshot`, `list_pages`, `click`, etc.) to verify web application health and UI responses.
+

@@ -136,9 +136,11 @@ done
 ## Critical Rules & Conventions for Agents
 
 1. **Docker Builds are Heavy**: The PHP compilation in `app/Dockerfile` compiles PHP 8.2 and `imagick` from source (`make -j$(nproc)`). Avoid unnecessary rebuilds unless editing PHP extensions, build args, or core packages.
-2. **Socket Communication**: Communication between Nginx and PHP-FPM uses a shared unix domain socket (`/run/php/php8.2-fpm.sock`). Ensure the `share` volume remains mapped in both services if editing `docker-compose.yml`.
+2. **Socket Communication**: Communication between Nginx and PHP-FPM uses a shared unix domain socket (`/run/php/php8.2-fpm-0.sock`). Ensure the socket filename specified in `app/conf/www.conf` (`listen = ...`) and `nginx/conf.d/default.conf` (`fastcgi_pass unix:...`) matches identically. Ensure the `share` volume remains mapped in both services in `docker-compose.yml`.
 3. **Upload & Timeout Limits**: For large file transfers in Kodbox:
    - `client_max_body_size` in Nginx must be configured accordingly (set to `0` or high value).
    - In `app/conf/php.ini`, verify `upload_max_filesize`, `post_max_size`, `memory_limit`, and `max_execution_time`.
 4. **Preserve User ID Mappings**: `USER`, `USER_ID`, and `GROUP_ID` in `docker-compose.yml` prevent files written by Kodbox from becoming unmanageable by the host user.
-5. **Always check `.agents/skills/`** for specialized workflows before making complex modifications.
+5. **Web Testing via Chrome DevTools MCP (MANDATORY)**: Never use `curl` to test or verify web endpoints, URLs, or HTTP responses. Always use the `chrome-devtools` MCP tools (`navigate_page`, `take_snapshot`, `list_pages`, etc.) for all web-related diagnostics and testing.
+6. **Always check `.agents/skills/`** for specialized workflows before making complex modifications.
+
