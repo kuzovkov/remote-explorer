@@ -109,6 +109,9 @@ if(file_exists(CONTROLLER_DIR.'debug.class.php')){
 	include_once(CONTROLLER_DIR.'debug.class.php');
 }
 if(!defined('INSTALL_CHANNEL')){define('INSTALL_CHANNEL','');}
+if(!defined('STATIC_PATH')){
+	define('STATIC_PATH', isset($config['settings']['staticPath']) ? $config['settings']['staticPath'] : './static/');
+}
 
 init_common();
 $config['autorun'] = array(

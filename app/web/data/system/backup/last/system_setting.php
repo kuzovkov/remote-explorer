@@ -16,7 +16,7 @@
     "rootListUser": 0,
     "rootListGroup": 0,
     "csrfProtect": 0,
-    "currentVersion": "4.52",
+    "currentVersion": "4.56",
     "wallpageDesktop": "1,2,3,4,5,6,7,8,9,10,11,12,13",
     "wallpageLogin": "2,3,6,8,9,11,12",
     "menu": [

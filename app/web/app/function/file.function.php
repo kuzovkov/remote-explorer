@@ -249,9 +249,10 @@ function get_path_father($path){
  */
 function get_path_ext($path){
 	$name = get_path_this($path);
-	$ext = '';
-	if(strstr($name,'.')){$ext = substr($name,strrpos($name,'.')+1);}
-	$isMatch = preg_match("/[0-9a-zA-Z_]+/",$ext,$match);// 只允许数字字母和下划线
+	$pos  = strrpos($name,'.');
+	$ext  = '';
+	if($pos !== false){$ext = substr($name,$pos+1);}
+	$isMatch = preg_match("/[0-9a-zA-Z_\-]+/",$ext,$match);// 只允许数字字母和下划线
 	return ($isMatch && $match[0]) ? strtolower($match[0]):'';
 }
 
@@ -1007,7 +1008,7 @@ function file_put_out($file,$download=-1,$downFilename=false){
 		header('Content-Disposition: attachment;filename='.$headerName);
 	}else{
 		header('Content-Type: '.$mime);
-		//header('Content-Disposition: inline;filename='.$headerName);
+		header('Content-Disposition: inline;filename='.$headerName);
 		if(strstr($mime,'text/')){
 			//$charset = get_charset(file_get_contents($file));
 			header('Content-Type: '.$mime.'; charset=');//避免自动追加utf8导致gbk网页乱码
@@ -1233,12 +1234,9 @@ function get_post_max(){
 
 
 function path_clear($path){
-	$path = str_replace('\\','/',trim($path));
-	$path = preg_replace('/\/+/', '/', $path);
-	if (strstr($path,'../')) {
-		$path = preg_replace('/\/\.+\//', '/', $path);
-	}
-	return $path;
+	if(!$path || $path == '.'){return $path;}
+	$path = str_replace(array("\r","\n",'\\'),array(' ',' ','/'),trim($path));//过滤换行符
+	return preg_replace('/\/+/','/',preg_replace('/(?:^|\/)\.+(?=\/|$)/','/',$path));
 }
 function path_clear_name($path){
 	$path = str_replace('\\','/',trim($path));

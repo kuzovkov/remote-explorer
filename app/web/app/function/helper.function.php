@@ -8,34 +8,26 @@ function checkExt($file){
 		return 0;
 	}
 	
-	//'php|phtml|phtm|pwml|asp|aspx|ascx|jsp|pl|htaccess|shtml|shtm'
 	$notAllow = strtolower($GLOBALS['auth']['extNotAllow']);
 	$extArr = explode('|',$notAllow);
 	if(in_array('asp',$extArr)){
 		$extArr = array_merge($extArr,array('aspx','ascx','pwml'));
 	}
 	if(in_array('php',$extArr)){
-		$extArr = array_merge($extArr,array('phtml','phtm','htaccess','pwml'));
+		$extArr = array_merge($extArr,array('phar','php3','php4','php5','php6','php7','php8','phps','cgi','phtml','phtm','htaccess','pwml'));
 	}
 	if(in_array('htm',$extArr) || in_array('html',$extArr)){
-		$extArr = array_merge($extArr,array('html','shtml','shtm','html','svg'));
+		$extArr = array_merge($extArr,array('htm','html','shtml','shtm','svg'));
 	}
-	foreach ($extArr as $current) {
-		if ($current !== '' && stristr($file,'.'.$current)){//含有扩展名
-			return 0;
-		}
-	}
-	return 1;
+	$ext = strtolower(substr($file,strrpos($file,'.')+1));
+	return in_array($ext,$extArr) ? 0 : 1;
 }
 function checkExtSafe($file){
-	if($file == '.htaccess' || $file == '.user.ini') return false;
-	if (strstr($file,'<') || strstr($file,'>') || $file=='') return false;
-	$disable  = 'php|phtml|phtm|pwml|asp|aspx|ascx|jsp|pl|html|htm|svg|shtml|shtm';
-	$extArr = explode('|',$disable);
-	foreach ($extArr as $ext) {
-		if ($ext && stristr($file,'.'.$ext)) return false;
-	}
-	return true;
+	if($file == '.htaccess' || $file == '.user.ini' || !$file) return false;
+	if(strstr($file,'<') || strstr($file,'>') || $file=='') return false;
+	$extArr = explode('|','php|phar|php3|php4|php5|php6|php7|php8|phps|cgi|phtml|phtm|pwml|asp|aspx|ascx|jsp|pl|html|htm|svg|shtml|shtm');
+	$ext = strtolower(substr($file,strrpos($file,'.')+1));
+	return in_array($ext,$extArr) ? false : true;
 }
 
 //-----解压缩跨平台编码转换；自动识别编码-----
@@ -82,7 +74,7 @@ function unzip_filter_ext($name){
 }
 //解压到kod，文件名处理;识别编码并转换到当前系统编码
 function unzip_pre_name($fileName){
-	$fileName = str_replace(array('../','..\\',''),'',$fileName);
+	$fileName = path_clear($fileName);
 	if (!function_exists('iconv')){
 		return unzip_filter_ext($fileName);
 	}
@@ -141,13 +133,13 @@ function serverInfo(){
 	foreach($lib as $key=>$val){
 		$libStr .= $key.'='.$val.';';
 	}
-	$system = explode(" ", php_uname());
+	$system = explode(" ", php_uname('a'));
 	$env = array(
 		"sys"   => strtolower($system[0]),
 		"php"	=> floatval(PHP_VERSION),
 		"server"=> $_SERVER['SERVER_SOFTWARE'],
 		"lib"	=> $libStr,
-		"info"	=> php_uname().';php='.PHP_VERSION,
+		"info"	=> php_uname('a').';php='.PHP_VERSION,
 	);
 	$result = str_replace("\/","@",json_encode($env));
 	return $result;
@@ -409,7 +401,9 @@ function init_setting(){
 			'kod_name_desc' => $GLOBALS['config']['setting_system']['system_desc'],
 		));
 	}
-	define('STATIC_PATH',$GLOBALS['config']['settings']['staticPath']);
+	if (!defined('STATIC_PATH')) {
+		define('STATIC_PATH',$GLOBALS['config']['settings']['staticPath']);
+	}
 }
 
 function user_logout(){

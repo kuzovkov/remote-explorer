@@ -5,7 +5,7 @@
     "pathHidden": "Thumb.db,.DS_Store,.gitignore,.git",
     "autoLogin": "0",
     "needCheckCode": "0",
-    "firstIn": "explorer",
+    "firstIn": "editor",
     "passwordCheck": "0",
     "newUserApp": "trello,一起写office,微信,365日历,石墨文档,ProcessOn,计算器,icloud,OfficeConverter",
     "newUserFolder": "我的文档,图片,视频,音乐",
@@ -13,10 +13,10 @@
     "groupShareFolder": "share",
     "desktopFolder": "desktop",
     "versionType": "A",
-    "rootListUser": 0,
+    "rootListUser": "0",
     "rootListGroup": 0,
     "csrfProtect": 0,
-    "currentVersion": "4.52",
+    "currentVersion": "4.56",
     "wallpageDesktop": "1,2,3,4,5,6,7,8,9,10,11,12,13",
     "wallpageLogin": "2,3,6,8,9,11,12",
     "menu": [
@@ -194,5 +194,8 @@
                 "pluginAuth": "all:1"
             }
         }
-    }
+    },
+    "globalIcp": "",
+    "globalCss": "",
+    "globalHtml": ""
 }

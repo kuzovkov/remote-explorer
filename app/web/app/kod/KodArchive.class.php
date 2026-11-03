@@ -100,7 +100,7 @@ class KodArchive {
 			$output  = $output && function_exists('iconv');
 			for ($i=0; $i < count($result); $i++) {
 				//不允许相对路径
-				$result[$i]['filename'] = str_replace(array('../','..\\'),"_",$result[$i]['filename']);
+				$result[$i]['filename'] = path_clear($result[$i]['filename']);
 				// $charset = get_charset($result[$i]['filename']);
 				if($output){
 					$result[$i]['filename'] = iconv_to($result[$i]['filename'],$charset,'utf-8');
@@ -128,7 +128,7 @@ class KodArchive {
 		}
 		if($part != '-1'){//解压部分.则构造 $pathRemove $indexPath
 			$indexInfo = self::fileIndex($listContent['data'],$part);
-			$partName  = str_replace(array('../','..\\'),'_',$indexInfo['filename']);
+			$partName  = path_clear($indexInfo['filename']);
 			$indexPath = $partName;
 			if($GLOBALS['config']['systemCharset'] != 'utf-8'){
 				$indexPath = unzip_pre_name($partName);//系统编码
